@@ -8,11 +8,18 @@ const common = require("./src/api/common/index");
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
 
-mongoose.connect(`mongodb+srv://anchit:${process.env.MONGO_PASSWORD}@cluster0.lpn0o.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`,{
-        useNewUrlParser:true,
-        useUnifiedTopology:true,
-}).then((_) => console.log("connected")).catch((err) => console.log(err));
+const connectToDb = async() => {
+    try{
+        await mongoose.connect(`mongodb+srv://anchit:${process.env.MONGO_PASSWORD}@cluster0.lpn0o.mongodb.net/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`,{
+           useNewUrlParser:true,
+           useUnifiedTopology:true,
+        });
+        } catch(err){
+           throw err;
+        }
+}
 
+connectToDb();
 // API to populate data on MongoDB from json file
 app.use("/api",populate);
 
